@@ -33,6 +33,8 @@ create table if not exists services (
   title_ru text not null,
   title_ka text not null,
   title_en text not null,
+  price numeric,
+  currency text default 'GEL',
   sort_order int default 0
 );
 

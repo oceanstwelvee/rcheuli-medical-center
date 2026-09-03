@@ -24,7 +24,12 @@ export interface Dict {
   heroFeature3: string;
   heroFeature4: string;
   aboutTitle: string;
-  servicesTitle: string;
+  servicesPageTitle: string;
+  servicesPageSubtitle: string;
+  servicesSearchPlaceholder: string;
+  servicesAllCategories: string;
+  servicesPriceOnRequest: string;
+  servicesNoResults: string;
   doctorsTitle: string;
   doctorsExampleBadge: string;
   contactsTitle: string;
@@ -52,7 +57,12 @@ export const translations: Record<Lang, Dict> = {
     heroFeature3: "ინდივიდუალური მიდგომა",
     heroFeature4: "ზრუნვა თითოეულზე",
     aboutTitle: "ჩვენ შესახებ",
-    servicesTitle: "სერვისები",
+    servicesPageTitle: "სერვისები და ფასები",
+    servicesPageSubtitle: "სრული ჩამონათვალი ჩვენი სერვისებისა და ფასების შესახებ",
+    servicesSearchPlaceholder: "მოძებნეთ სერვისი...",
+    servicesAllCategories: "ყველა კატეგორია",
+    servicesPriceOnRequest: "საფასო წარმოადგინეთ მოთხოვნით",
+    servicesNoResults: "სერვისები ვერ მოიძებნა",
     doctorsTitle: "ჩვენი ექიმები",
     doctorsExampleBadge: "მაგალითი",
     contactsTitle: "კონტაქტი",
@@ -78,7 +88,12 @@ export const translations: Record<Lang, Dict> = {
     heroFeature3: "Индивидуальный подход",
     heroFeature4: "Забота о каждом",
     aboutTitle: "О нас",
-    servicesTitle: "Услуги",
+    servicesPageTitle: "Услуги и цены",
+    servicesPageSubtitle: "Полный перечень наших услуг и актуальные цены",
+    servicesSearchPlaceholder: "Поиск услуги...",
+    servicesAllCategories: "Все категории",
+    servicesPriceOnRequest: "Цена по запросу",
+    servicesNoResults: "Услуги не найдены",
     doctorsTitle: "Наши врачи",
     doctorsExampleBadge: "пример",
     contactsTitle: "Контакты",
@@ -104,7 +119,12 @@ export const translations: Record<Lang, Dict> = {
     heroFeature3: "Individual Approach",
     heroFeature4: "Care for Everyone",
     aboutTitle: "About us",
-    servicesTitle: "Services",
+    servicesPageTitle: "Services & Prices",
+    servicesPageSubtitle: "Full list of our services and current prices",
+    servicesSearchPlaceholder: "Search services...",
+    servicesAllCategories: "All categories",
+    servicesPriceOnRequest: "Price on request",
+    servicesNoResults: "No services found",
     doctorsTitle: "Our doctors",
     doctorsExampleBadge: "example",
     contactsTitle: "Contacts",

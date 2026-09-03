@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { CLINIC } from "@/lib/constants";
 
 const NAV_ITEMS = [
-  { href: "#about", key: "navAbout" as const },
-  { href: "#services", key: "navServices" as const },
-  { href: "#doctors", key: "navDoctors" as const },
-  { href: "#contacts", key: "navContacts" as const },
+  { href: "/#about", key: "navAbout" as const },
+  { href: "/services", key: "navServices" as const },
+  { href: "/#doctors", key: "navDoctors" as const },
+  { href: "/#contacts", key: "navContacts" as const },
 ];
 
 export function Header() {
@@ -20,7 +21,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border-soft bg-surface/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <a href="#top" className="flex items-center gap-2 shrink-0">
+        <Link href="/" className="flex items-center gap-2 shrink-0">
           <Image
             src="/logo/logo.png"
             alt={t.clinicName}
@@ -32,17 +33,17 @@ export function Header() {
           <span className="hidden text-sm font-semibold leading-tight text-foreground sm:block">
             {t.clinicName}
           </span>
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
           {NAV_ITEMS.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               className="text-sm font-medium text-foreground/70 transition-colors hover:text-brand-red"
             >
               {t[item.key]}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -77,14 +78,14 @@ export function Header() {
         <div className="border-t border-border-soft bg-surface px-4 py-4 md:hidden">
           <nav className="flex flex-col gap-3">
             {NAV_ITEMS.map((item) => (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
                 className="text-base font-medium text-foreground/80"
               >
                 {t[item.key]}
-              </a>
+              </Link>
             ))}
           </nav>
           <div className="mt-4 flex items-center justify-between gap-3">

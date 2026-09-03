@@ -21,6 +21,8 @@ function emptyService(categoryId: string, sortOrder: number): DraftService {
     title_ru: "",
     title_ka: "",
     title_en: "",
+    price: null,
+    currency: "GEL",
     sort_order: sortOrder,
   };
 }
@@ -113,6 +115,7 @@ export default function ServicesAdminPage() {
       title_ru: editingService.title_ru,
       title_ka: editingService.title_ka,
       title_en: editingService.title_en,
+      price: editingService.price,
       sort_order: editingService.sort_order,
     };
 
@@ -300,6 +303,28 @@ export default function ServicesAdminPage() {
                 )}
               </LangTabs>
             </div>
+
+            <div className="mt-4 flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-foreground/70">
+                Цена (GEL)
+              </label>
+              <input
+                type="number"
+                inputMode="decimal"
+                min={0}
+                step="0.01"
+                placeholder="Не указана"
+                value={editingService.price ?? ""}
+                onChange={(e) =>
+                  setEditingService({
+                    ...editingService,
+                    price: e.target.value === "" ? null : Number(e.target.value),
+                  })
+                }
+                className="w-full rounded-lg border border-border-soft bg-background px-3 py-2 text-sm outline-none focus:border-brand-red"
+              />
+            </div>
+
             {error && <p className="mt-3 text-sm text-brand-red-dark">{error}</p>}
             <div className="mt-5 flex justify-end gap-2">
               <button

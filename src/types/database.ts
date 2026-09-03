@@ -29,6 +29,8 @@ export interface Service {
   title_ru: string;
   title_ka: string;
   title_en: string;
+  price: number | null;
+  currency: string;
   sort_order: number;
 }
 
