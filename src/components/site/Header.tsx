@@ -20,14 +20,14 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border-soft bg-surface/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-4">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-5">
         <Link href="/" className="flex shrink-0 items-center">
           <Image
             src="/logo/logo.png"
             alt={t.clinicName}
-            width={52}
-            height={52}
-            className="h-9 w-9 object-contain sm:h-12 sm:w-12"
+            width={72}
+            height={72}
+            className="h-12 w-12 object-contain sm:h-16 sm:w-16"
             priority
           />
         </Link>
