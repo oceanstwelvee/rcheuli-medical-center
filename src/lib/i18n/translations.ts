@@ -18,6 +18,11 @@ export interface Dict {
   addressButton: string;
   heroTitle: string;
   heroSubtitle: string;
+  heroCityBadge: string;
+  heroFeature1: string;
+  heroFeature2: string;
+  heroFeature3: string;
+  heroFeature4: string;
   aboutTitle: string;
   servicesTitle: string;
   doctorsTitle: string;
@@ -41,6 +46,11 @@ export const translations: Record<Lang, Dict> = {
     addressButton: "ჩვენი მისამართი",
     heroTitle: "Rcheuli Medical Center",
     heroSubtitle: "თანამედროვე მრავალპროფილური კლინიკა თბილისის გულში",
+    heroCityBadge: "თბილისი",
+    heroFeature1: "გამოცდილი ექიმები",
+    heroFeature2: "თანამედროვე აღჭურვილობა",
+    heroFeature3: "ინდივიდუალური მიდგომა",
+    heroFeature4: "ზრუნვა თითოეულზე",
     aboutTitle: "ჩვენ შესახებ",
     servicesTitle: "სერვისები",
     doctorsTitle: "ჩვენი ექიმები",
@@ -62,6 +72,11 @@ export const translations: Record<Lang, Dict> = {
     addressButton: "Наш адрес",
     heroTitle: "Rcheuli Medical Center",
     heroSubtitle: "Современная многопрофильная клиника в самом сердце Тбилиси",
+    heroCityBadge: "ТБИЛИСИ",
+    heroFeature1: "Опытные врачи",
+    heroFeature2: "Современное оборудование",
+    heroFeature3: "Индивидуальный подход",
+    heroFeature4: "Забота о каждом",
     aboutTitle: "О нас",
     servicesTitle: "Услуги",
     doctorsTitle: "Наши врачи",
@@ -80,9 +95,14 @@ export const translations: Record<Lang, Dict> = {
     navDoctors: "Doctors",
     navContacts: "Contacts",
     callButton: "Call us",
-    addressButton: "Our address",
+    addressButton: "Our Address",
     heroTitle: "Rcheuli Medical Center",
     heroSubtitle: "A modern multidisciplinary clinic in the heart of Tbilisi",
+    heroCityBadge: "TBILISI",
+    heroFeature1: "Experienced Doctors",
+    heroFeature2: "Modern Equipment",
+    heroFeature3: "Individual Approach",
+    heroFeature4: "Care for Everyone",
     aboutTitle: "About us",
     servicesTitle: "Services",
     doctorsTitle: "Our doctors",
