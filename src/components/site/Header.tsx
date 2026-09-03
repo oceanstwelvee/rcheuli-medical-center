@@ -20,19 +20,16 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border-soft bg-surface/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <Link href="/" className="flex items-center gap-2 shrink-0">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-4">
+        <Link href="/" className="flex shrink-0 items-center">
           <Image
             src="/logo/logo.png"
             alt={t.clinicName}
-            width={40}
-            height={40}
-            className="h-10 w-10 object-contain"
+            width={52}
+            height={52}
+            className="h-9 w-9 object-contain sm:h-12 sm:w-12"
             priority
           />
-          <span className="hidden text-sm font-semibold leading-tight text-foreground sm:block">
-            {t.clinicName}
-          </span>
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
