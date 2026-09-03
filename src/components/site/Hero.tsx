@@ -56,16 +56,20 @@ export function Hero() {
   const [firstWord, ...rest] = t.heroTitle.split(" ");
 
   return (
-    <section id="top" className="relative isolate overflow-hidden">
+    <section
+      id="top"
+      className="relative isolate overflow-hidden aspect-[21/9] min-h-[560px] lg:min-h-[620px]"
+    >
       <div className="absolute inset-0 -z-10">
         <Image
           src="/images/hero-clinic.jpg"
           alt=""
           fill
           priority
-          className="object-cover object-right"
+          className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--background)_0%,var(--background)_46%,rgba(255,253,250,0.25)_52%,transparent_58%)]" />
+        <div className="absolute inset-y-0 left-[38%] right-[38%] backdrop-blur-md [mask-image:linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--background)_0%,var(--background)_47%,rgba(255,253,250,0.4)_51%,transparent_55%)]" />
       </div>
 
       <div className="relative mx-auto flex min-h-[560px] max-w-6xl flex-col justify-center gap-6 px-4 py-20 sm:px-6 sm:py-28 lg:min-h-[620px]">
