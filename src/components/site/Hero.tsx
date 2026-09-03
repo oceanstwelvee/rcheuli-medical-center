@@ -65,7 +65,7 @@ export function Hero() {
           priority
           className="object-cover object-right"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-background from-0% via-background/80 via-45% to-transparent to-90%" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--background)_0%,var(--background)_46%,rgba(255,253,250,0.25)_52%,transparent_58%)]" />
       </div>
 
       <div className="relative mx-auto flex min-h-[560px] max-w-6xl flex-col justify-center gap-6 px-4 py-20 sm:px-6 sm:py-28 lg:min-h-[620px]">
@@ -91,13 +91,13 @@ export function Hero() {
           </a>
         </div>
 
-        <div className="flex flex-wrap gap-x-8 gap-y-5 pt-4">
+        <div className="grid max-w-md grid-cols-2 gap-x-6 gap-y-5 pt-4">
           {FEATURES.map(({ icon: Icon, key }) => (
             <div key={key} className="flex items-center gap-3">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-yellow/15 text-brand-yellow-dark">
                 <Icon />
               </span>
-              <span className="max-w-[7rem] text-sm font-medium leading-tight text-foreground/80">
+              <span className="text-sm font-medium leading-tight text-foreground/80">
                 {t[key]}
               </span>
             </div>
