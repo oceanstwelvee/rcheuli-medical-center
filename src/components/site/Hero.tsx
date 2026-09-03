@@ -58,7 +58,7 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative isolate overflow-hidden aspect-[21/9] min-h-[560px] lg:min-h-[620px]"
+      className="relative isolate w-full overflow-hidden aspect-[21/9] min-h-[560px] lg:min-h-[620px]"
     >
       <div className="absolute inset-0 -z-10">
         <Image
@@ -68,8 +68,8 @@ export function Hero() {
           priority
           className="object-cover object-center"
         />
-        <div className="absolute inset-y-0 left-[38%] right-[38%] backdrop-blur-md [mask-image:linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--background)_0%,var(--background)_47%,rgba(255,253,250,0.4)_51%,transparent_55%)]" />
+        <div className="absolute inset-y-0 left-[43%] right-[40%] backdrop-blur-sm [mask-image:linear-gradient(to_right,transparent,black_25%,black_75%,transparent)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--background)_0%,var(--background)_45%,rgba(255,253,250,0.55)_52%,transparent_60%)]" />
       </div>
 
       <div className="relative mx-auto flex min-h-[560px] max-w-6xl flex-col justify-center gap-6 px-4 py-20 sm:px-6 sm:py-28 lg:min-h-[620px]">
@@ -95,13 +95,13 @@ export function Hero() {
           </a>
         </div>
 
-        <div className="grid max-w-md grid-cols-2 gap-x-6 gap-y-5 pt-4">
+        <div className="flex flex-wrap gap-x-6 gap-y-5 pt-4">
           {FEATURES.map(({ icon: Icon, key }) => (
             <div key={key} className="flex items-center gap-3">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-yellow/15 text-brand-yellow-dark">
                 <Icon />
               </span>
-              <span className="text-sm font-medium leading-tight text-foreground/80">
+              <span className="max-w-[8.5rem] text-sm font-medium leading-tight text-foreground/80">
                 {t[key]}
               </span>
             </div>
