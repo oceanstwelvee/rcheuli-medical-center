@@ -58,21 +58,20 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative isolate w-full overflow-hidden aspect-[21/9] min-h-[560px] lg:min-h-[620px]"
+      className="relative isolate w-full overflow-hidden min-h-[600px] sm:min-h-[560px] lg:min-h-[620px]"
     >
       <div className="absolute inset-0 -z-10">
         <Image
-          src="/images/hero-clinic.jpg"
+          src="/images/background.png"
           alt=""
           fill
           priority
-          className="object-cover object-center"
+          className="object-cover object-[30%_center] sm:object-center"
         />
-        <div className="absolute inset-y-0 left-[43%] right-[40%] backdrop-blur-sm [mask-image:linear-gradient(to_right,transparent,black_25%,black_75%,transparent)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--background)_0%,var(--background)_45%,rgba(255,253,250,0.55)_52%,transparent_60%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--background)_0%,rgba(255,253,250,0.55)_30%,transparent_55%)] sm:bg-[linear-gradient(to_right,var(--background)_0%,rgba(255,253,250,0.5)_28%,transparent_45%)]" />
       </div>
 
-      <div className="relative mx-auto flex min-h-[560px] max-w-6xl flex-col justify-center gap-6 px-4 py-20 sm:px-6 sm:py-28 lg:min-h-[620px]">
+      <div className="relative mx-auto flex min-h-[600px] max-w-6xl flex-col justify-center gap-6 px-4 py-20 sm:min-h-[560px] sm:px-6 sm:py-28 lg:min-h-[620px]">
         <span className="w-fit rounded-full border border-brand-yellow/40 bg-surface/80 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-brand-yellow-dark backdrop-blur">
           {t.heroCityBadge}
         </span>
