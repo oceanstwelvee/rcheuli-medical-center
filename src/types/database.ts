@@ -38,6 +38,23 @@ export interface Service {
   sort_order: number;
 }
 
+export interface Promotion {
+  id: string;
+  title_ru: string;
+  title_ka: string;
+  title_en: string;
+  description_ru: string | null;
+  description_ka: string | null;
+  description_en: string | null;
+  price: number | null;
+  currency: string;
+  deadline: string | null;
+  image_url: string | null;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+}
+
 export interface SiteContent {
   key: string;
   value_ru: string | null;

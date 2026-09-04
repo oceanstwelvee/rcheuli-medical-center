@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 const LINKS = [
   { href: "/admin/doctors", label: "Врачи" },
   { href: "/admin/services", label: "Услуги" },
+  { href: "/admin/promotions", label: "Акции" },
   { href: "/admin/about", label: "О нас" },
 ];
 

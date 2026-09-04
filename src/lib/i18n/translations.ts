@@ -36,6 +36,8 @@ export interface Dict {
   doctorsAllSpecialties: string;
   doctorsLanguagesLabel: string;
   doctorsNoResults: string;
+  promotionsTitle: string;
+  promotionsUntilLabel: string;
   contactsTitle: string;
   contactsAddressLabel: string;
   contactsPhoneLabel: string;
@@ -73,6 +75,8 @@ export const translations: Record<Lang, Dict> = {
     doctorsAllSpecialties: "ყველა სპეციალობა",
     doctorsLanguagesLabel: "ენები:",
     doctorsNoResults: "ექიმები ვერ მოიძებნა",
+    promotionsTitle: "აქციები",
+    promotionsUntilLabel: "ვადა:",
     contactsTitle: "კონტაქტი",
     contactsAddressLabel: "მისამართი",
     contactsPhoneLabel: "ტელეფონი",
@@ -108,6 +112,8 @@ export const translations: Record<Lang, Dict> = {
     doctorsAllSpecialties: "Все специализации",
     doctorsLanguagesLabel: "Языки:",
     doctorsNoResults: "Врачи не найдены",
+    promotionsTitle: "Акции",
+    promotionsUntilLabel: "до",
     contactsTitle: "Контакты",
     contactsAddressLabel: "Адрес",
     contactsPhoneLabel: "Телефон",
@@ -143,6 +149,8 @@ export const translations: Record<Lang, Dict> = {
     doctorsAllSpecialties: "All specialties",
     doctorsLanguagesLabel: "Languages:",
     doctorsNoResults: "No doctors found",
+    promotionsTitle: "Actions",
+    promotionsUntilLabel: "until",
     contactsTitle: "Contacts",
     contactsAddressLabel: "Address",
     contactsPhoneLabel: "Phone",
@@ -157,4 +165,11 @@ export const LANGUAGE_NAMES: Record<Lang, Record<Lang, string>> = {
   ka: { ka: "ქართული", ru: "Грузинский", en: "Georgian" },
   ru: { ka: "რუსული", ru: "Русский", en: "Russian" },
   en: { ka: "ინგლისური", ru: "Английский", en: "English" },
+};
+
+// BCP-47 locale for formatting dates/numbers per current site language.
+export const DATE_LOCALES: Record<Lang, string> = {
+  ka: "ka-GE",
+  ru: "ru-RU",
+  en: "en-US",
 };

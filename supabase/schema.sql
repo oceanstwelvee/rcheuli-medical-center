@@ -44,6 +44,51 @@ create table if not exists services (
   sort_order int default 0
 );
 
+-- Promotions
+create table if not exists promotions (
+  id uuid primary key default gen_random_uuid(),
+  title_ru text not null,
+  title_ka text not null,
+  title_en text not null,
+  description_ru text,
+  description_ka text,
+  description_en text,
+  price numeric,
+  currency text default 'GEL',
+  deadline date,
+  image_url text,
+  is_active boolean default false,
+  sort_order int default 0,
+  created_at timestamptz default now()
+);
+
+alter table promotions enable row level security;
+
+-- Public read: only active promotions
+drop policy if exists "public read promotions" on promotions;
+create policy "public read promotions" on promotions
+  for select using (is_active = true);
+
+-- Authenticated: full access (read all + write), same pattern as doctors/services
+drop policy if exists "auth write promotions" on promotions;
+create policy "auth write promotions" on promotions for all
+  using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+
+-- Storage bucket for promotion photos, publicly readable
+insert into storage.buckets (id, name, public)
+values ('promotion-images', 'promotion-images', true)
+on conflict (id) do nothing;
+
+drop policy if exists "public read promotion-images" on storage.objects;
+create policy "public read promotion-images" on storage.objects
+  for select using (bucket_id = 'promotion-images');
+
+drop policy if exists "auth write promotion-images" on storage.objects;
+create policy "auth write promotion-images" on storage.objects
+  for all
+  using (bucket_id = 'promotion-images' and auth.role() = 'authenticated')
+  with check (bucket_id = 'promotion-images' and auth.role() = 'authenticated');
+
 -- Site content (key/value, multilingual)
 create table if not exists site_content (
   key text primary key,
