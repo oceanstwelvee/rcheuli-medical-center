@@ -4,9 +4,24 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Avatar } from "@/components/ui/Avatar";
 import { LangTabs } from "@/components/admin/LangTabs";
-import type { Doctor } from "@/types/database";
+import { LANGS } from "@/lib/i18n/translations";
+import type { Doctor, Lang } from "@/types/database";
 
-type DraftDoctor = Omit<Doctor, "id" | "created_at"> & { id?: string };
+const LANGUAGE_CHECKBOX_LABELS: Record<Lang, string> = {
+  ka: "Грузинский",
+  ru: "Русский",
+  en: "Английский",
+};
+
+type DraftDoctor = Omit<
+  Doctor,
+  "id" | "created_at" | "tags_ru" | "tags_ka" | "tags_en"
+> & {
+  id?: string;
+  tags_ru: string;
+  tags_ka: string;
+  tags_en: string;
+};
 
 const EMPTY_DRAFT: DraftDoctor = {
   full_name: "",
@@ -17,9 +32,24 @@ const EMPTY_DRAFT: DraftDoctor = {
   bio_ka: "",
   bio_en: "",
   photo_url: "",
+  languages: [],
+  tags_ru: "",
+  tags_ka: "",
+  tags_en: "",
   sort_order: 0,
   is_active: true,
 };
+
+function tagsArrayToInput(tags: string[] | null | undefined) {
+  return (tags ?? []).join(", ");
+}
+
+function tagsInputToArray(input: string) {
+  return input
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+}
 
 export default function DoctorsAdminPage() {
   const supabase = createClient();
@@ -53,7 +83,23 @@ export default function DoctorsAdminPage() {
 
   function openEdit(doctor: Doctor) {
     setError(null);
-    setEditing({ ...doctor });
+    setEditing({
+      ...doctor,
+      tags_ru: tagsArrayToInput(doctor.tags_ru),
+      tags_ka: tagsArrayToInput(doctor.tags_ka),
+      tags_en: tagsArrayToInput(doctor.tags_en),
+    });
+  }
+
+  function toggleLanguage(lang: Lang) {
+    setEditing((prev) => {
+      if (!prev) return prev;
+      const has = prev.languages.includes(lang);
+      const languages = has
+        ? prev.languages.filter((l) => l !== lang)
+        : [...prev.languages, lang];
+      return { ...prev, languages };
+    });
   }
 
   async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -100,6 +146,10 @@ export default function DoctorsAdminPage() {
       bio_ka: editing.bio_ka,
       bio_en: editing.bio_en,
       photo_url: editing.photo_url || null,
+      languages: editing.languages,
+      tags_ru: tagsInputToArray(editing.tags_ru),
+      tags_ka: tagsInputToArray(editing.tags_ka),
+      tags_en: tagsInputToArray(editing.tags_en),
       sort_order: editing.sort_order,
       is_active: editing.is_active,
     };
@@ -252,6 +302,51 @@ export default function DoctorsAdminPage() {
                     />
                   )}
                 </LangTabs>
+              </div>
+
+              <div>
+                <p className="mb-1.5 text-sm font-medium text-foreground/70">
+                  Теги
+                </p>
+                <LangTabs>
+                  {(lang) => (
+                    <input
+                      value={editing[`tags_${lang}`]}
+                      onChange={(e) =>
+                        setEditing({
+                          ...editing,
+                          [`tags_${lang}`]: e.target.value,
+                        })
+                      }
+                      placeholder="Например: Пациенты 18+, Хирургия"
+                      className="w-full rounded-lg border border-border-soft bg-background px-3 py-2 text-sm outline-none focus:border-brand-red"
+                    />
+                  )}
+                </LangTabs>
+                <p className="mt-1 text-xs text-foreground/45">
+                  Теги через запятую
+                </p>
+              </div>
+
+              <div>
+                <p className="mb-1.5 text-sm font-medium text-foreground/70">
+                  Языки
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  {LANGS.map((lang) => (
+                    <label
+                      key={lang}
+                      className="flex items-center gap-2 text-sm text-foreground/70"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={editing.languages.includes(lang)}
+                        onChange={() => toggleLanguage(lang)}
+                      />
+                      {LANGUAGE_CHECKBOX_LABELS[lang]}
+                    </label>
+                  ))}
+                </div>
               </div>
 
               <div className="flex items-center gap-4">

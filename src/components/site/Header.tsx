@@ -10,7 +10,7 @@ import { CLINIC } from "@/lib/constants";
 const NAV_ITEMS = [
   { href: "/#about", key: "navAbout" as const },
   { href: "/services", key: "navServices" as const },
-  { href: "/#doctors", key: "navDoctors" as const },
+  { href: "/doctors", key: "navDoctors" as const },
   { href: "/#contacts", key: "navContacts" as const },
 ];
 

@@ -31,7 +31,11 @@ export interface Dict {
   servicesPriceOnRequest: string;
   servicesNoResults: string;
   doctorsTitle: string;
-  doctorsExampleBadge: string;
+  doctorsPageSubtitle: string;
+  doctorsSearchPlaceholder: string;
+  doctorsAllSpecialties: string;
+  doctorsLanguagesLabel: string;
+  doctorsNoResults: string;
   contactsTitle: string;
   contactsAddressLabel: string;
   contactsPhoneLabel: string;
@@ -64,7 +68,11 @@ export const translations: Record<Lang, Dict> = {
     servicesPriceOnRequest: "საფასო წარმოადგინეთ მოთხოვნით",
     servicesNoResults: "სერვისები ვერ მოიძებნა",
     doctorsTitle: "ჩვენი ექიმები",
-    doctorsExampleBadge: "მაგალითი",
+    doctorsPageSubtitle: "იპოვეთ თქვენი ექიმი სპეციალობის, ენის ან სახელის მიხედვით",
+    doctorsSearchPlaceholder: "ექიმის ძებნა...",
+    doctorsAllSpecialties: "ყველა სპეციალობა",
+    doctorsLanguagesLabel: "ენები:",
+    doctorsNoResults: "ექიმები ვერ მოიძებნა",
     contactsTitle: "კონტაქტი",
     contactsAddressLabel: "მისამართი",
     contactsPhoneLabel: "ტელეფონი",
@@ -95,7 +103,11 @@ export const translations: Record<Lang, Dict> = {
     servicesPriceOnRequest: "Цена по запросу",
     servicesNoResults: "Услуги не найдены",
     doctorsTitle: "Наши врачи",
-    doctorsExampleBadge: "пример",
+    doctorsPageSubtitle: "Найдите своего врача по специальности, языку общения или имени",
+    doctorsSearchPlaceholder: "Поиск врача...",
+    doctorsAllSpecialties: "Все специализации",
+    doctorsLanguagesLabel: "Языки:",
+    doctorsNoResults: "Врачи не найдены",
     contactsTitle: "Контакты",
     contactsAddressLabel: "Адрес",
     contactsPhoneLabel: "Телефон",
@@ -126,7 +138,11 @@ export const translations: Record<Lang, Dict> = {
     servicesPriceOnRequest: "Price on request",
     servicesNoResults: "No services found",
     doctorsTitle: "Our doctors",
-    doctorsExampleBadge: "example",
+    doctorsPageSubtitle: "Find your doctor by specialty, language, or name",
+    doctorsSearchPlaceholder: "Search doctor...",
+    doctorsAllSpecialties: "All specialties",
+    doctorsLanguagesLabel: "Languages:",
+    doctorsNoResults: "No doctors found",
     contactsTitle: "Contacts",
     contactsAddressLabel: "Address",
     contactsPhoneLabel: "Phone",
@@ -134,4 +150,11 @@ export const translations: Record<Lang, Dict> = {
     footerRights: "All rights reserved",
     loading: "Loading...",
   },
+};
+
+// Display name of each spoken-language code, per current site language.
+export const LANGUAGE_NAMES: Record<Lang, Record<Lang, string>> = {
+  ka: { ka: "ქართული", ru: "Грузинский", en: "Georgian" },
+  ru: { ka: "რუსული", ru: "Русский", en: "Russian" },
+  en: { ka: "ინგლისური", ru: "Английский", en: "English" },
 };

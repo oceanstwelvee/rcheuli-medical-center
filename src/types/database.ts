@@ -10,6 +10,10 @@ export interface Doctor {
   bio_ka: string | null;
   bio_en: string | null;
   photo_url: string | null;
+  languages: Lang[];
+  tags_ru: string[];
+  tags_ka: string[];
+  tags_en: string[];
   sort_order: number;
   is_active: boolean;
   created_at: string;

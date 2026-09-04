@@ -17,6 +17,12 @@ create table if not exists doctors (
   created_at timestamptz default now()
 );
 
+-- Doctors: languages spoken + extra tag pills (per-language, comma-free arrays)
+alter table doctors add column if not exists languages text[] default '{}';
+alter table doctors add column if not exists tags_ru text[] default '{}';
+alter table doctors add column if not exists tags_ka text[] default '{}';
+alter table doctors add column if not exists tags_en text[] default '{}';
+
 -- Service categories
 create table if not exists service_categories (
   id uuid primary key default gen_random_uuid(),
