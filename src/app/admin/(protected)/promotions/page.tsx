@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { LangTabs } from "@/components/admin/LangTabs";
 import { ToggleSwitch } from "@/components/admin/ToggleSwitch";
+import { computeDiscountPercent } from "@/lib/promotions";
 import type { Promotion } from "@/types/database";
 
 type DraftPromotion = Omit<Promotion, "id" | "created_at"> & { id?: string };
@@ -16,6 +17,7 @@ const EMPTY_DRAFT: DraftPromotion = {
   description_ka: "",
   description_en: "",
   price: null,
+  old_price: null,
   currency: "GEL",
   deadline: null,
   image_url: "",
@@ -66,10 +68,10 @@ export default function PromotionsAdminPage() {
     setError(null);
 
     const ext = file.name.split(".").pop();
-    const path = `${crypto.randomUUID()}.${ext}`;
+    const path = `promotions/${crypto.randomUUID()}.${ext}`;
 
     const { error: uploadError } = await supabase.storage
-      .from("promotion-images")
+      .from("doctor-photos")
       .upload(path, file, { upsert: false });
 
     if (uploadError) {
@@ -78,7 +80,7 @@ export default function PromotionsAdminPage() {
       return;
     }
 
-    const { data } = supabase.storage.from("promotion-images").getPublicUrl(path);
+    const { data } = supabase.storage.from("doctor-photos").getPublicUrl(path);
     setEditing((prev) => (prev ? { ...prev, image_url: data.publicUrl } : prev));
     setUploading(false);
   }
@@ -101,6 +103,7 @@ export default function PromotionsAdminPage() {
       description_ka: editing.description_ka,
       description_en: editing.description_en,
       price: editing.price,
+      old_price: editing.old_price,
       currency: editing.currency,
       deadline: editing.deadline || null,
       image_url: editing.image_url || null,
@@ -168,7 +171,13 @@ export default function PromotionsAdminPage() {
         <p className="mt-6 text-sm text-foreground/50">Пока нет акций.</p>
       ) : (
         <div className="mt-6 flex flex-col gap-3">
-          {promotions.map((promotion) => (
+          {promotions.map((promotion) => {
+            const discount = computeDiscountPercent(
+              promotion.price,
+              promotion.old_price
+            );
+
+            return (
             <div
               key={promotion.id}
               className="flex flex-wrap items-center gap-4 rounded-2xl border border-border-soft bg-surface p-4 shadow-sm"
@@ -188,7 +197,7 @@ export default function PromotionsAdminPage() {
                 <p className="truncate font-semibold text-foreground">
                   {promotion.title_ru}
                 </p>
-                <div className="mt-1 flex items-center gap-2">
+                <div className="mt-1 flex flex-wrap items-center gap-2">
                   {promotion.is_active ? (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
@@ -198,6 +207,29 @@ export default function PromotionsAdminPage() {
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-muted px-2.5 py-0.5 text-xs font-medium text-foreground/50">
                       <span className="h-1.5 w-1.5 rounded-full bg-foreground/30" />
                       Скрыта
+                    </span>
+                  )}
+                  {(promotion.price != null || promotion.old_price != null) && (
+                    <span className="text-xs text-foreground/60">
+                      {discount != null ? (
+                        <>
+                          <span className="line-through">
+                            {promotion.old_price} {promotion.currency}
+                          </span>{" "}
+                          <span className="font-semibold text-foreground">
+                            {promotion.price} {promotion.currency}
+                          </span>{" "}
+                          <span className="font-semibold text-brand-red-dark">
+                            -{discount}%
+                          </span>
+                        </>
+                      ) : (
+                        promotion.price != null && (
+                          <span className="font-semibold text-foreground">
+                            {promotion.price} {promotion.currency}
+                          </span>
+                        )
+                      )}
                     </span>
                   )}
                 </div>
@@ -226,7 +258,8 @@ export default function PromotionsAdminPage() {
                 </button>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -305,7 +338,7 @@ export default function PromotionsAdminPage() {
               </div>
 
               <div className="flex flex-wrap gap-4">
-                <div className="flex flex-1 flex-col gap-1.5">
+                <div className="flex flex-1 flex-col gap-1.5 min-w-[140px]">
                   <label className="text-sm font-medium text-foreground/70">
                     Цена (GEL)
                   </label>
@@ -326,7 +359,28 @@ export default function PromotionsAdminPage() {
                   />
                 </div>
 
-                <div className="flex flex-1 flex-col gap-1.5">
+                <div className="flex flex-1 flex-col gap-1.5 min-w-[140px]">
+                  <label className="text-sm font-medium text-foreground/70">
+                    Старая цена (GEL)
+                  </label>
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    min={0}
+                    step="0.01"
+                    placeholder="Не указана"
+                    value={editing.old_price ?? ""}
+                    onChange={(e) =>
+                      setEditing({
+                        ...editing,
+                        old_price: e.target.value === "" ? null : Number(e.target.value),
+                      })
+                    }
+                    className="w-full rounded-lg border border-border-soft bg-background px-3 py-2 text-sm outline-none focus:border-brand-red"
+                  />
+                </div>
+
+                <div className="flex flex-1 flex-col gap-1.5 min-w-[140px]">
                   <label className="text-sm font-medium text-foreground/70">
                     Действует до
                   </label>

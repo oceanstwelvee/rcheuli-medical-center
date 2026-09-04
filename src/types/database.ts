@@ -47,6 +47,7 @@ export interface Promotion {
   description_ka: string | null;
   description_en: string | null;
   price: number | null;
+  old_price: number | null;
   currency: string;
   deadline: string | null;
   image_url: string | null;

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { DATE_LOCALES } from "@/lib/i18n/translations";
+import { computeDiscountPercent } from "@/lib/promotions";
 import type { Lang, Promotion } from "@/types/database";
 
 function formatDeadline(deadline: string, lang: Lang) {
@@ -20,6 +21,7 @@ function PromotionCard({ promotion }: { promotion: Promotion }) {
   const description = promotion[
     `description_${lang}` as keyof Promotion
   ] as string | null;
+  const discount = computeDiscountPercent(promotion.price, promotion.old_price);
 
   return (
     <div className="flex flex-col overflow-hidden rounded-2xl border border-border-soft bg-surface shadow-sm">
@@ -51,9 +53,21 @@ function PromotionCard({ promotion }: { promotion: Promotion }) {
             </svg>
           </div>
         )}
+        {promotion.price != null && discount != null && (
+          <span className="absolute left-3 top-3 rounded-full bg-brand-red px-2.5 py-1 text-xs font-bold text-white shadow">
+            -{discount}%
+          </span>
+        )}
         {promotion.price != null && (
-          <span className="absolute right-3 top-3 rounded-full bg-brand-yellow-dark px-3 py-1 text-sm font-semibold text-white shadow">
-            {promotion.price} {promotion.currency}
+          <span className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full bg-brand-yellow-dark px-3 py-1 text-sm font-semibold text-white shadow">
+            {discount != null && (
+              <span className="text-white/70 line-through">
+                {promotion.old_price} {promotion.currency}
+              </span>
+            )}
+            <span>
+              {promotion.price} {promotion.currency}
+            </span>
           </span>
         )}
       </div>

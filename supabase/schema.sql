@@ -62,6 +62,9 @@ create table if not exists promotions (
   created_at timestamptz default now()
 );
 
+-- Promotions: old (pre-discount) price, shown struck-through next to price
+alter table promotions add column if not exists old_price numeric;
+
 alter table promotions enable row level security;
 
 -- Public read: only active promotions
@@ -74,20 +77,8 @@ drop policy if exists "auth write promotions" on promotions;
 create policy "auth write promotions" on promotions for all
   using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 
--- Storage bucket for promotion photos, publicly readable
-insert into storage.buckets (id, name, public)
-values ('promotion-images', 'promotion-images', true)
-on conflict (id) do nothing;
-
-drop policy if exists "public read promotion-images" on storage.objects;
-create policy "public read promotion-images" on storage.objects
-  for select using (bucket_id = 'promotion-images');
-
-drop policy if exists "auth write promotion-images" on storage.objects;
-create policy "auth write promotion-images" on storage.objects
-  for all
-  using (bucket_id = 'promotion-images' and auth.role() = 'authenticated')
-  with check (bucket_id = 'promotion-images' and auth.role() = 'authenticated');
+-- Promotion photos are stored in the existing "doctor-photos" bucket under a
+-- "promotions/" prefix — no separate bucket/policies needed.
 
 -- Site content (key/value, multilingual)
 create table if not exists site_content (
