@@ -54,29 +54,33 @@ function PromotionCard({ promotion }: { promotion: Promotion }) {
           </div>
         )}
         {promotion.price != null && discount != null && (
-          <span className="absolute left-3 top-3 rounded-full bg-brand-red px-2.5 py-1 text-xs font-bold text-white shadow">
+          <span className="absolute left-3 top-3 rounded-2xl bg-brand-red px-4 py-1.5 text-xl font-extrabold text-white shadow-md">
             -{discount}%
-          </span>
-        )}
-        {promotion.price != null && (
-          <span className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full bg-brand-yellow-dark px-3 py-1 text-sm font-semibold text-white shadow">
-            {discount != null && (
-              <span className="text-white/70 line-through">
-                {promotion.old_price} {promotion.currency}
-              </span>
-            )}
-            <span>
-              {promotion.price} {promotion.currency}
-            </span>
           </span>
         )}
       </div>
 
       <div className="flex flex-1 flex-col gap-2 p-5">
-        {promotion.deadline && (
-          <span className="w-fit rounded-full bg-brand-red/10 px-2.5 py-0.5 text-xs font-semibold text-brand-red-dark">
-            {t.promotionsUntilLabel} {formatDeadline(promotion.deadline, lang)}
-          </span>
+        {(promotion.deadline || promotion.price != null) && (
+          <div className="flex items-center gap-2">
+            {promotion.deadline && (
+              <span className="w-fit rounded-full bg-brand-red/10 px-2.5 py-0.5 text-xs font-semibold text-brand-red-dark">
+                {t.promotionsUntilLabel} {formatDeadline(promotion.deadline, lang)}
+              </span>
+            )}
+            {promotion.price != null && (
+              <span className="ml-auto flex items-baseline gap-1.5">
+                {discount != null && (
+                  <span className="text-sm font-normal text-foreground/40 line-through">
+                    {promotion.old_price} {promotion.currency}
+                  </span>
+                )}
+                <span className="text-lg font-extrabold text-brand-red">
+                  {promotion.price} {promotion.currency}
+                </span>
+              </span>
+            )}
+          </div>
         )}
         <h3 className="text-lg font-bold text-foreground">{title}</h3>
         {description && (
