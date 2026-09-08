@@ -14,4 +14,7 @@ export const CLINIC = {
     "https://www.google.com/maps?q=" +
     encodeURIComponent("Tbilisi, Pekini Street 5") +
     "&output=embed",
+  mapLink:
+    "https://www.google.com/maps?q=" +
+    encodeURIComponent("Tbilisi, Pekini Street 5"),
 };
