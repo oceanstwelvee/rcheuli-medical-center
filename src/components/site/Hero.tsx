@@ -94,7 +94,7 @@ export function Hero() {
           </a>
         </div>
 
-        <div className="flex flex-wrap gap-x-6 gap-y-5 pt-4">
+        <div className="flex max-w-lg flex-wrap gap-x-6 gap-y-5 pt-4">
           {FEATURES.map(({ icon: Icon, key }) => (
             <div key={key} className="flex items-center gap-3">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-yellow/15 text-brand-yellow-dark">
