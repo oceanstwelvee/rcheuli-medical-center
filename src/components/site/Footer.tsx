@@ -77,7 +77,6 @@ export function Footer() {
               {t.footerBookText}
             </p>
             <PrimaryCallButton className="w-fit" />
-            <SocialLinks />
           </div>
 
           <div className="flex flex-col gap-3">
