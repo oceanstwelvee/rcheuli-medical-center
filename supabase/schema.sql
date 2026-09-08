@@ -65,6 +65,9 @@ create table if not exists promotions (
 -- Promotions: old (pre-discount) price, shown struck-through next to price
 alter table promotions add column if not exists old_price numeric;
 
+-- Services: mark specific services to feature in the homepage preview
+alter table services add column if not exists is_featured boolean default false;
+
 alter table promotions enable row level security;
 
 -- Public read: only active promotions

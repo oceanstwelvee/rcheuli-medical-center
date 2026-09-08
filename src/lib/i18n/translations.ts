@@ -30,12 +30,19 @@ export interface Dict {
   servicesAllCategories: string;
   servicesPriceOnRequest: string;
   servicesNoResults: string;
+  servicesPreviewTitle: string;
+  servicesPreviewSubtitle: string;
+  servicesPreviewEmpty: string;
+  servicesViewAllButton: string;
   doctorsTitle: string;
   doctorsPageSubtitle: string;
   doctorsSearchPlaceholder: string;
   doctorsAllSpecialties: string;
   doctorsLanguagesLabel: string;
   doctorsNoResults: string;
+  doctorsPreviewSubtitle: string;
+  doctorsPreviewEmpty: string;
+  doctorsViewAllButton: string;
   promotionsTitle: string;
   promotionsUntilLabel: string;
   contactsTitle: string;
@@ -44,6 +51,7 @@ export interface Dict {
   contactsSocialLabel: string;
   footerRights: string;
   loading: string;
+  adminServiceFeaturedLabel: string;
 }
 
 export const translations: Record<Lang, Dict> = {
@@ -69,12 +77,19 @@ export const translations: Record<Lang, Dict> = {
     servicesAllCategories: "ყველა კატეგორია",
     servicesPriceOnRequest: "საფასო წარმოადგინეთ მოთხოვნით",
     servicesNoResults: "სერვისები ვერ მოიძებნა",
+    servicesPreviewTitle: "ჩვენი სერვისები",
+    servicesPreviewSubtitle: "ყველაზე მოთხოვნადი სერვისები ჩვენი კლინიკიდან",
+    servicesPreviewEmpty: "ინფორმაცია მალე გამოჩნდება",
+    servicesViewAllButton: "ყველა სერვისი და ფასი",
     doctorsTitle: "ჩვენი ექიმები",
     doctorsPageSubtitle: "იპოვეთ თქვენი ექიმი სპეციალობის, ენის ან სახელის მიხედვით",
     doctorsSearchPlaceholder: "ექიმის ძებნა...",
     doctorsAllSpecialties: "ყველა სპეციალობა",
     doctorsLanguagesLabel: "ენები:",
     doctorsNoResults: "ექიმები ვერ მოიძებნა",
+    doctorsPreviewSubtitle: "ჩვენი გამოცდილი სამედიცინო გუნდი",
+    doctorsPreviewEmpty: "ინფორმაცია მალე გამოჩნდება",
+    doctorsViewAllButton: "ყველა ექიმი",
     promotionsTitle: "აქციები",
     promotionsUntilLabel: "ვადა:",
     contactsTitle: "კონტაქტი",
@@ -83,6 +98,7 @@ export const translations: Record<Lang, Dict> = {
     contactsSocialLabel: "სოციალური ქსელები",
     footerRights: "ყველა უფლება დაცულია",
     loading: "იტვირთება...",
+    adminServiceFeaturedLabel: "მთავარ გვერდზე ჩვენება",
   },
   ru: {
     clinicName: "Rcheuli Medical Center",
@@ -106,12 +122,19 @@ export const translations: Record<Lang, Dict> = {
     servicesAllCategories: "Все категории",
     servicesPriceOnRequest: "Цена по запросу",
     servicesNoResults: "Услуги не найдены",
+    servicesPreviewTitle: "Наши услуги",
+    servicesPreviewSubtitle: "Самые востребованные услуги нашей клиники",
+    servicesPreviewEmpty: "Информация скоро появится",
+    servicesViewAllButton: "Все услуги и цены",
     doctorsTitle: "Наши врачи",
     doctorsPageSubtitle: "Найдите своего врача по специальности, языку общения или имени",
     doctorsSearchPlaceholder: "Поиск врача...",
     doctorsAllSpecialties: "Все специализации",
     doctorsLanguagesLabel: "Языки:",
     doctorsNoResults: "Врачи не найдены",
+    doctorsPreviewSubtitle: "Наша опытная команда врачей",
+    doctorsPreviewEmpty: "Информация скоро появится",
+    doctorsViewAllButton: "Все врачи",
     promotionsTitle: "Акции",
     promotionsUntilLabel: "до",
     contactsTitle: "Контакты",
@@ -120,6 +143,7 @@ export const translations: Record<Lang, Dict> = {
     contactsSocialLabel: "Соцсети",
     footerRights: "Все права защищены",
     loading: "Загрузка...",
+    adminServiceFeaturedLabel: "Показывать на главной",
   },
   en: {
     clinicName: "Rcheuli Medical Center",
@@ -143,12 +167,19 @@ export const translations: Record<Lang, Dict> = {
     servicesAllCategories: "All categories",
     servicesPriceOnRequest: "Price on request",
     servicesNoResults: "No services found",
+    servicesPreviewTitle: "Our services",
+    servicesPreviewSubtitle: "The most requested services at our clinic",
+    servicesPreviewEmpty: "Information coming soon",
+    servicesViewAllButton: "All services & prices",
     doctorsTitle: "Our doctors",
     doctorsPageSubtitle: "Find your doctor by specialty, language, or name",
     doctorsSearchPlaceholder: "Search doctor...",
     doctorsAllSpecialties: "All specialties",
     doctorsLanguagesLabel: "Languages:",
     doctorsNoResults: "No doctors found",
+    doctorsPreviewSubtitle: "Our experienced medical team",
+    doctorsPreviewEmpty: "Information coming soon",
+    doctorsViewAllButton: "All doctors",
     promotionsTitle: "Actions",
     promotionsUntilLabel: "until",
     contactsTitle: "Contacts",
@@ -157,6 +188,7 @@ export const translations: Record<Lang, Dict> = {
     contactsSocialLabel: "Social media",
     footerRights: "All rights reserved",
     loading: "Loading...",
+    adminServiceFeaturedLabel: "Show on homepage",
   },
 };
 

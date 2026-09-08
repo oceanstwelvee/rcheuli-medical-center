@@ -36,6 +36,7 @@ export interface Service {
   price: number | null;
   currency: string;
   sort_order: number;
+  is_featured: boolean;
 }
 
 export interface Promotion {

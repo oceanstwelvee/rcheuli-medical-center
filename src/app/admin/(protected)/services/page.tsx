@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { LangTabs } from "@/components/admin/LangTabs";
+import { ToggleSwitch } from "@/components/admin/ToggleSwitch";
+import { translations } from "@/lib/i18n/translations";
 import type { Service, ServiceCategory } from "@/types/database";
 
 type DraftCategory = Omit<ServiceCategory, "id"> & { id?: string };
@@ -24,6 +26,7 @@ function emptyService(categoryId: string, sortOrder: number): DraftService {
     price: null,
     currency: "GEL",
     sort_order: sortOrder,
+    is_featured: false,
   };
 }
 
@@ -138,6 +141,26 @@ export default function ServicesAdminPage() {
     if (!error) loadData();
   }
 
+  async function handleToggleFeatured(service: Service) {
+    const nextFeatured = !service.is_featured;
+    setServices((prev) =>
+      prev.map((s) => (s.id === service.id ? { ...s, is_featured: nextFeatured } : s))
+    );
+
+    const { error } = await supabase
+      .from("services")
+      .update({ is_featured: nextFeatured })
+      .eq("id", service.id);
+
+    if (error) {
+      setServices((prev) =>
+        prev.map((s) =>
+          s.id === service.id ? { ...s, is_featured: service.is_featured } : s
+        )
+      );
+    }
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -206,8 +229,18 @@ export default function ServicesAdminPage() {
                       key={service.id}
                       className="flex items-center justify-between gap-3 py-2 text-sm"
                     >
-                      <span className="text-foreground/80">{service.title_ru}</span>
-                      <span className="flex shrink-0 gap-2">
+                      <span className="min-w-0 flex-1 truncate text-foreground/80">
+                        {service.title_ru}
+                      </span>
+                      <span className="flex shrink-0 items-center gap-3">
+                        <label className="flex items-center gap-1.5 text-xs text-foreground/50">
+                          <ToggleSwitch
+                            checked={service.is_featured}
+                            onChange={() => handleToggleFeatured(service)}
+                            label={translations.ru.adminServiceFeaturedLabel}
+                          />
+                          {translations.ru.adminServiceFeaturedLabel}
+                        </label>
                         <button
                           type="button"
                           onClick={() => setEditingService({ ...service })}
