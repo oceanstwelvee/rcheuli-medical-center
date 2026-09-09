@@ -146,22 +146,22 @@ export function ServicesPageContent({
                   {items.map((service) => (
                     <li
                       key={service.id}
-                      className="flex items-end gap-2 py-2.5"
+                      className="flex items-start gap-2 py-2.5"
                     >
-                      <span className="text-sm text-foreground/80">
+                      <span className="min-w-0 break-words text-sm text-foreground/80">
                         {
                           service[
                             `title_${lang}` as keyof Service
                           ] as string
                         }
                       </span>
-                      <span className="mb-1 flex-1 border-b border-dotted border-border-soft" />
+                      <span className="mt-2.5 flex-1 border-b border-dotted border-border-soft" />
                       <span
-                        className={`shrink-0 text-sm font-semibold ${
+                        className={
                           service.price != null
-                            ? "text-brand-yellow-dark"
-                            : "text-foreground/40"
-                        }`}
+                            ? "shrink-0 whitespace-nowrap text-right text-sm font-semibold text-brand-yellow-dark"
+                            : "min-w-0 whitespace-normal text-right text-xs font-semibold text-foreground/40"
+                        }
                       >
                         {formatPrice(service, t.servicesPriceOnRequest)}
                       </span>

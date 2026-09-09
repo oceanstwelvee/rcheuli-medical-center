@@ -26,8 +26,10 @@ function ServiceCard({
         )}
       </div>
       <p
-        className={`text-sm font-semibold ${
-          service.price != null ? "text-brand-yellow-dark" : "text-foreground/40"
+        className={`min-w-0 whitespace-normal break-words font-semibold ${
+          service.price != null
+            ? "text-sm text-brand-yellow-dark"
+            : "text-xs text-foreground/40"
         }`}
       >
         {service.price != null
