@@ -33,6 +33,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  // The root layout ships a static <html lang="ka">, so the real language —
+  // which only exists as client state — has to be mirrored onto the document
+  // after mount. Depending on `lang` covers both the first load (this runs
+  // again once the effect above restores a stored language) and every switch.
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
+
   const setLang = (next: Lang) => {
     setLangState(next);
     window.localStorage.setItem(STORAGE_KEY, next);
