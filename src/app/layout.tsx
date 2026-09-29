@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 import "./globals.css";
@@ -27,6 +28,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <LanguageProvider>{children}</LanguageProvider>
+        <Script
+          src="https://widget.bigmed.ge/v1/widget.js"
+          data-clinic="cwk_01m352bmyd961xn42vxrj5xd1k"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
-import { PrimaryCallButton } from "./PhoneLink";
 import type { Dict } from "@/lib/i18n/translations";
 
 function IconShieldPlus() {
@@ -52,7 +51,7 @@ const FEATURES: { icon: () => React.ReactNode; key: keyof Dict }[] = [
 ];
 
 export function Hero() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [firstWord, ...rest] = t.heroTitle.split(" ");
 
   return (
@@ -85,7 +84,13 @@ export function Hero() {
         <p className="max-w-md text-lg text-foreground/70">{t.heroSubtitle}</p>
 
         <div className="flex flex-wrap items-center gap-3 pt-2">
-          <PrimaryCallButton />
+          {/* BigMed booking widget renders its own button into this element's
+              shadow root; data-bigmed-locale keeps it on the site's language. */}
+          <div
+            className="max-w-full"
+            data-bigmed-button="emb_01m352kkdy3ws9g1jraea54xat"
+            data-bigmed-locale={lang}
+          />
           <a
             href="#contacts"
             className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-brand-yellow-dark px-6 py-[10px] font-semibold text-brand-yellow-dark transition-colors hover:bg-brand-yellow-dark hover:text-white"
