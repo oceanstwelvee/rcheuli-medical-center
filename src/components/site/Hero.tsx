@@ -84,13 +84,21 @@ export function Hero() {
         <p className="max-w-md text-lg text-foreground/70">{t.heroSubtitle}</p>
 
         <div className="flex flex-wrap items-center gap-3 pt-2">
-          {/* BigMed booking widget renders its own button into this element's
-              shadow root; data-bigmed-locale keeps it on the site's language. */}
-          <div
-            className="max-w-full"
-            data-bigmed-button="emb_01m352kkdy3ws9g1jraea54xat"
-            data-bigmed-locale={lang}
-          />
+          {/* BigMed renders its own button into the shadow root of the inner
+              div. It exposes no size options: the --bm-* custom properties are
+              declared on .bm inside that shadow root (so an outside value is
+              overridden) and there is no ::part(). Font size lives in the
+              clinic panel and is pinned at 24px, which makes the button much
+              taller than "our address" next to it, so the only lever left is
+              scaling the wrapper. zoom, not transform: scale — zoom changes
+              the laid-out size, so the row reserves exactly the scaled box and
+              no empty gap is left beside the button. */}
+          <div className="max-w-full [zoom:0.78] sm:[zoom:0.85]">
+            <div
+              data-bigmed-button="emb_01m352kkdy3ws9g1jraea54xat"
+              data-bigmed-locale={lang}
+            />
+          </div>
           <a
             href="#contacts"
             className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-brand-yellow-dark px-6 py-[10px] font-semibold text-brand-yellow-dark transition-colors hover:bg-brand-yellow-dark hover:text-white"
