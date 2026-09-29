@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { LangTabs } from "@/components/admin/LangTabs";
 import { ToggleSwitch } from "@/components/admin/ToggleSwitch";
-import { translations } from "@/lib/i18n/translations";
+import { useAdminLanguage } from "@/lib/i18n/AdminLanguageContext";
 import type { Service, ServiceCategory } from "@/types/database";
 
 type DraftCategory = Omit<ServiceCategory, "id"> & { id?: string };
@@ -32,13 +32,19 @@ function emptyService(categoryId: string, sortOrder: number): DraftService {
 
 export default function ServicesAdminPage() {
   const supabase = createClient();
+  const { t, phrases } = useAdminLanguage();
   const [categories, setCategories] = useState<ServiceCategory[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [listError, setListError] = useState<string | null>(null);
 
-  const [editingCategory, setEditingCategory] = useState<DraftCategory | null>(null);
-  const [editingService, setEditingService] = useState<DraftService | null>(null);
+  const [editingCategory, setEditingCategory] = useState<DraftCategory | null>(
+    null
+  );
+  const [editingService, setEditingService] = useState<DraftService | null>(
+    null
+  );
   const [saving, setSaving] = useState(false);
 
   async function loadData() {
@@ -47,6 +53,15 @@ export default function ServicesAdminPage() {
       supabase.from("service_categories").select("*").order("sort_order"),
       supabase.from("services").select("*").order("sort_order"),
     ]);
+    if (categoriesRes.error || servicesRes.error) {
+      console.error(
+        "Failed to load services:",
+        categoriesRes.error ?? servicesRes.error
+      );
+      setListError(t.loadFailed);
+    } else {
+      setListError(null);
+    }
     setCategories((categoriesRes.data as ServiceCategory[]) ?? []);
     setServices((servicesRes.data as Service[]) ?? []);
     setLoading(false);
@@ -61,7 +76,7 @@ export default function ServicesAdminPage() {
   async function saveCategory() {
     if (!editingCategory) return;
     if (!editingCategory.title_ru.trim()) {
-      setError("Укажите название категории (хотя бы по-русски).");
+      setError(t.serviceCategoryTitleRequired);
       return;
     }
     setSaving(true);
@@ -83,7 +98,8 @@ export default function ServicesAdminPage() {
 
     setSaving(false);
     if (result.error) {
-      setError("Ошибка сохранения: " + result.error.message);
+      console.error("Failed to save service category:", result.error);
+      setError(t.saveFailed);
       return;
     }
     setEditingCategory(null);
@@ -91,23 +107,25 @@ export default function ServicesAdminPage() {
   }
 
   async function deleteCategory(category: ServiceCategory) {
-    if (
-      !window.confirm(
-        `Удалить категорию «${category.title_ru}» вместе со всеми её услугами?`
-      )
-    )
+    if (!window.confirm(phrases.confirmDeleteCategory(category.title_ru)))
       return;
-    const { error } = await supabase
+    const { error: deleteError } = await supabase
       .from("service_categories")
       .delete()
       .eq("id", category.id);
-    if (!error) loadData();
+    if (deleteError) {
+      console.error("Failed to delete service category:", deleteError);
+      setListError(t.deleteFailed);
+      return;
+    }
+    setListError(null);
+    loadData();
   }
 
   async function saveService() {
     if (!editingService) return;
     if (!editingService.title_ru.trim()) {
-      setError("Укажите название услуги (хотя бы по-русски).");
+      setError(t.serviceTitleRequired);
       return;
     }
     setSaving(true);
@@ -123,12 +141,16 @@ export default function ServicesAdminPage() {
     };
 
     const result = editingService.id
-      ? await supabase.from("services").update(payload).eq("id", editingService.id)
+      ? await supabase
+          .from("services")
+          .update(payload)
+          .eq("id", editingService.id)
       : await supabase.from("services").insert(payload);
 
     setSaving(false);
     if (result.error) {
-      setError("Ошибка сохранения: " + result.error.message);
+      console.error("Failed to save service:", result.error);
+      setError(t.saveFailed);
       return;
     }
     setEditingService(null);
@@ -136,23 +158,36 @@ export default function ServicesAdminPage() {
   }
 
   async function deleteService(service: Service) {
-    if (!window.confirm(`Удалить услугу «${service.title_ru}»?`)) return;
-    const { error } = await supabase.from("services").delete().eq("id", service.id);
-    if (!error) loadData();
+    if (!window.confirm(phrases.confirmDeleteService(service.title_ru))) return;
+    const { error: deleteError } = await supabase
+      .from("services")
+      .delete()
+      .eq("id", service.id);
+    if (deleteError) {
+      console.error("Failed to delete service:", deleteError);
+      setListError(t.deleteFailed);
+      return;
+    }
+    setListError(null);
+    loadData();
   }
 
   async function handleToggleFeatured(service: Service) {
     const nextFeatured = !service.is_featured;
     setServices((prev) =>
-      prev.map((s) => (s.id === service.id ? { ...s, is_featured: nextFeatured } : s))
+      prev.map((s) =>
+        s.id === service.id ? { ...s, is_featured: nextFeatured } : s
+      )
     );
 
-    const { error } = await supabase
+    const { error: toggleError } = await supabase
       .from("services")
       .update({ is_featured: nextFeatured })
       .eq("id", service.id);
 
-    if (error) {
+    if (toggleError) {
+      console.error("Failed to toggle service visibility:", toggleError);
+      setListError(t.saveFailed);
       setServices((prev) =>
         prev.map((s) =>
           s.id === service.id ? { ...s, is_featured: service.is_featured } : s
@@ -163,21 +198,30 @@ export default function ServicesAdminPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-foreground">Услуги</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-xl font-semibold text-foreground">
+          {t.servicesTitle}
+        </h1>
         <button
           type="button"
           onClick={() =>
-            setEditingCategory({ ...EMPTY_CATEGORY, sort_order: categories.length })
+            setEditingCategory({
+              ...EMPTY_CATEGORY,
+              sort_order: categories.length,
+            })
           }
           className="rounded-full bg-brand-red px-4 py-2 text-sm font-semibold text-white hover:bg-brand-red-dark"
         >
-          + Категория
+          + {t.serviceCategoryAdd}
         </button>
       </div>
 
+      {listError && (
+        <p className="mt-4 text-sm text-brand-red-dark">{listError}</p>
+      )}
+
       {loading ? (
-        <p className="mt-6 text-sm text-foreground/50">Загрузка...</p>
+        <p className="mt-6 text-sm text-foreground/50">{t.loading}</p>
       ) : (
         <div className="mt-6 flex flex-col gap-6">
           {categories.map((category) => (
@@ -185,38 +229,39 @@ export default function ServicesAdminPage() {
               key={category.id}
               className="rounded-2xl border border-border-soft bg-surface p-5 shadow-sm"
             >
-              <div className="flex items-center justify-between gap-3">
-                <h2 className="text-base font-semibold text-brand-red-dark">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2 className="min-w-0 break-words text-base font-semibold text-brand-red-dark">
                   {category.title_ru}
                 </h2>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
                     onClick={() =>
                       setEditingService(
                         emptyService(
                           category.id,
-                          services.filter((s) => s.category_id === category.id).length
+                          services.filter((s) => s.category_id === category.id)
+                            .length
                         )
                       )
                     }
                     className="rounded-full border border-border-soft px-3 py-1 text-xs font-medium text-foreground/70 hover:border-brand-yellow-dark hover:text-brand-yellow-dark"
                   >
-                    + Услуга
+                    + {t.serviceAdd}
                   </button>
                   <button
                     type="button"
                     onClick={() => setEditingCategory({ ...category })}
                     className="rounded-full border border-border-soft px-3 py-1 text-xs font-medium text-foreground/70 hover:border-brand-yellow-dark hover:text-brand-yellow-dark"
                   >
-                    Изменить
+                    {t.change}
                   </button>
                   <button
                     type="button"
                     onClick={() => deleteCategory(category)}
                     className="rounded-full border border-border-soft px-3 py-1 text-xs font-medium text-foreground/70 hover:border-brand-red hover:text-brand-red"
                   >
-                    Удалить
+                    {t.remove}
                   </button>
                 </div>
               </div>
@@ -227,39 +272,42 @@ export default function ServicesAdminPage() {
                   .map((service) => (
                     <li
                       key={service.id}
-                      className="flex items-center justify-between gap-3 py-2 text-sm"
+                      className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 py-2 text-sm"
                     >
                       <span className="min-w-0 flex-1 truncate text-foreground/80">
                         {service.title_ru}
                       </span>
-                      <span className="flex shrink-0 items-center gap-3">
+                      <span className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1">
                         <label className="flex items-center gap-1.5 text-xs text-foreground/50">
                           <ToggleSwitch
                             checked={service.is_featured}
                             onChange={() => handleToggleFeatured(service)}
-                            label={translations.ru.adminServiceFeaturedLabel}
+                            label={t.serviceFeatured}
                           />
-                          {translations.ru.adminServiceFeaturedLabel}
+                          {t.serviceFeatured}
                         </label>
                         <button
                           type="button"
                           onClick={() => setEditingService({ ...service })}
                           className="text-xs font-medium text-foreground/50 hover:text-brand-yellow-dark"
                         >
-                          Изменить
+                          {t.change}
                         </button>
                         <button
                           type="button"
                           onClick={() => deleteService(service)}
                           className="text-xs font-medium text-foreground/50 hover:text-brand-red"
                         >
-                          Удалить
+                          {t.remove}
                         </button>
                       </span>
                     </li>
                   ))}
-                {services.filter((s) => s.category_id === category.id).length === 0 && (
-                  <li className="py-2 text-sm text-foreground/40">Нет услуг</li>
+                {services.filter((s) => s.category_id === category.id).length ===
+                  0 && (
+                  <li className="py-2 text-sm text-foreground/40">
+                    {t.serviceCategoryEmpty}
+                  </li>
                 )}
               </ul>
             </div>
@@ -269,15 +317,16 @@ export default function ServicesAdminPage() {
 
       {editingCategory && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-8">
-          <div className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-xl">
+          <div className="max-h-full w-full max-w-md overflow-y-auto rounded-2xl bg-surface p-6 shadow-xl">
             <h2 className="text-lg font-semibold text-foreground">
-              {editingCategory.id ? "Изменить категорию" : "Новая категория"}
+              {editingCategory.id ? t.serviceCategoryEdit : t.serviceCategoryNew}
             </h2>
             <div className="mt-5">
               <LangTabs>
                 {(lang) => (
                   <input
                     value={editingCategory[`title_${lang}`] ?? ""}
+                    aria-label={`${t.serviceCategoryAdd} — ${lang.toUpperCase()}`}
                     onChange={(e) =>
                       setEditingCategory({
                         ...editingCategory,
@@ -289,8 +338,10 @@ export default function ServicesAdminPage() {
                 )}
               </LangTabs>
             </div>
-            {error && <p className="mt-3 text-sm text-brand-red-dark">{error}</p>}
-            <div className="mt-5 flex justify-end gap-2">
+            {error && (
+              <p className="mt-3 text-sm text-brand-red-dark">{error}</p>
+            )}
+            <div className="mt-5 flex flex-wrap justify-end gap-2">
               <button
                 type="button"
                 onClick={() => {
@@ -299,7 +350,7 @@ export default function ServicesAdminPage() {
                 }}
                 className="rounded-full border border-border-soft px-4 py-2 text-sm font-medium text-foreground/70"
               >
-                Отмена
+                {t.cancel}
               </button>
               <button
                 type="button"
@@ -307,7 +358,7 @@ export default function ServicesAdminPage() {
                 disabled={saving}
                 className="rounded-full bg-brand-red px-4 py-2 text-sm font-semibold text-white hover:bg-brand-red-dark disabled:opacity-60"
               >
-                {saving ? "Сохранение..." : "Сохранить"}
+                {saving ? t.saving : t.save}
               </button>
             </div>
           </div>
@@ -316,15 +367,16 @@ export default function ServicesAdminPage() {
 
       {editingService && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-8">
-          <div className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-xl">
+          <div className="max-h-full w-full max-w-md overflow-y-auto rounded-2xl bg-surface p-6 shadow-xl">
             <h2 className="text-lg font-semibold text-foreground">
-              {editingService.id ? "Изменить услугу" : "Новая услуга"}
+              {editingService.id ? t.serviceEdit : t.serviceNew}
             </h2>
             <div className="mt-5">
               <LangTabs>
                 {(lang) => (
                   <input
                     value={editingService[`title_${lang}`] ?? ""}
+                    aria-label={`${t.serviceAdd} — ${lang.toUpperCase()}`}
                     onChange={(e) =>
                       setEditingService({
                         ...editingService,
@@ -338,15 +390,19 @@ export default function ServicesAdminPage() {
             </div>
 
             <div className="mt-4 flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-foreground/70">
-                Цена (GEL)
+              <label
+                htmlFor="service-price"
+                className="text-sm font-medium text-foreground/70"
+              >
+                {t.servicePrice}
               </label>
               <input
+                id="service-price"
                 type="number"
                 inputMode="decimal"
                 min={0}
                 step="0.01"
-                placeholder="Не указана"
+                placeholder={t.servicePricePlaceholder}
                 value={editingService.price ?? ""}
                 onChange={(e) =>
                   setEditingService({
@@ -358,8 +414,10 @@ export default function ServicesAdminPage() {
               />
             </div>
 
-            {error && <p className="mt-3 text-sm text-brand-red-dark">{error}</p>}
-            <div className="mt-5 flex justify-end gap-2">
+            {error && (
+              <p className="mt-3 text-sm text-brand-red-dark">{error}</p>
+            )}
+            <div className="mt-5 flex flex-wrap justify-end gap-2">
               <button
                 type="button"
                 onClick={() => {
@@ -368,7 +426,7 @@ export default function ServicesAdminPage() {
                 }}
                 className="rounded-full border border-border-soft px-4 py-2 text-sm font-medium text-foreground/70"
               >
-                Отмена
+                {t.cancel}
               </button>
               <button
                 type="button"
@@ -376,7 +434,7 @@ export default function ServicesAdminPage() {
                 disabled={saving}
                 className="rounded-full bg-brand-red px-4 py-2 text-sm font-semibold text-white hover:bg-brand-red-dark disabled:opacity-60"
               >
-                {saving ? "Сохранение..." : "Сохранить"}
+                {saving ? t.saving : t.save}
               </button>
             </div>
           </div>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { LangTabs } from "@/components/admin/LangTabs";
+import { useAdminLanguage } from "@/lib/i18n/AdminLanguageContext";
 import type { SiteContent } from "@/types/database";
 
 const EMPTY: SiteContent = {
@@ -14,6 +15,7 @@ const EMPTY: SiteContent = {
 
 export default function AboutAdminPage() {
   const supabase = createClient();
+  const { t } = useAdminLanguage();
   const [content, setContent] = useState<SiteContent>(EMPTY);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -22,11 +24,12 @@ export default function AboutAdminPage() {
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase
+      const { data, error: loadError } = await supabase
         .from("site_content")
         .select("*")
         .eq("key", "about_us")
         .maybeSingle();
+      if (loadError) console.error("Failed to load about_us content:", loadError);
       if (data) setContent(data as SiteContent);
       setLoading(false);
     })();
@@ -38,7 +41,7 @@ export default function AboutAdminPage() {
     setError(null);
     setSaved(false);
 
-    const { error } = await supabase.from("site_content").upsert({
+    const { error: saveError } = await supabase.from("site_content").upsert({
       key: "about_us",
       value_ru: content.value_ru,
       value_ka: content.value_ka,
@@ -47,23 +50,22 @@ export default function AboutAdminPage() {
 
     setSaving(false);
 
-    if (error) {
-      setError("Ошибка сохранения: " + error.message);
+    if (saveError) {
+      console.error("Failed to save about_us content:", saveError);
+      setError(t.saveFailed);
       return;
     }
     setSaved(true);
   }
 
   if (loading) {
-    return <p className="text-sm text-foreground/50">Загрузка...</p>;
+    return <p className="text-sm text-foreground/50">{t.loading}</p>;
   }
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-foreground">О нас</h1>
-      <p className="mt-1 text-sm text-foreground/50">
-        Текст отображается в разделе «О нас» на главной странице.
-      </p>
+      <h1 className="text-xl font-semibold text-foreground">{t.aboutTitle}</h1>
+      <p className="mt-1 text-sm text-foreground/50">{t.aboutHint}</p>
 
       <div className="mt-6 max-w-2xl rounded-2xl border border-border-soft bg-surface p-6 shadow-sm">
         <LangTabs>
@@ -81,7 +83,7 @@ export default function AboutAdminPage() {
 
         {error && <p className="mt-3 text-sm text-brand-red-dark">{error}</p>}
         {saved && !error && (
-          <p className="mt-3 text-sm text-emerald-600">Сохранено.</p>
+          <p className="mt-3 text-sm text-emerald-600">{t.saved}</p>
         )}
 
         <div className="mt-5 flex justify-end">
@@ -91,7 +93,7 @@ export default function AboutAdminPage() {
             disabled={saving}
             className="rounded-full bg-brand-red px-4 py-2 text-sm font-semibold text-white hover:bg-brand-red-dark disabled:opacity-60"
           >
-            {saving ? "Сохранение..." : "Сохранить"}
+            {saving ? t.saving : t.save}
           </button>
         </div>
       </div>

@@ -8,6 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { usePathname } from "next/navigation";
 import type { Lang } from "@/types/database";
 import { LANGS, translations, type Dict } from "./translations";
 
@@ -24,6 +25,7 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(DEFAULT_LANG);
+  const pathname = usePathname();
 
   useEffect(() => {
     const stored = window.localStorage.getItem(STORAGE_KEY) as Lang | null;
@@ -37,9 +39,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   // which only exists as client state — has to be mirrored onto the document
   // after mount. Depending on `lang` covers both the first load (this runs
   // again once the effect above restores a stored language) and every switch.
+  // Under /admin the panel runs on its own language, so AdminLanguageProvider
+  // owns the attribute there and this one stands down; changing `pathname`
+  // re-runs the effect, so leaving the panel restores the site's language.
   useEffect(() => {
+    if (pathname?.startsWith("/admin")) return;
     document.documentElement.lang = lang;
-  }, [lang]);
+  }, [lang, pathname]);
 
   const setLang = (next: Lang) => {
     setLangState(next);

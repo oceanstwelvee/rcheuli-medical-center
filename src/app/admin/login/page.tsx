@@ -4,9 +4,12 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
+import { useAdminLanguage } from "@/lib/i18n/AdminLanguageContext";
+import { AdminLanguageSwitcher } from "@/components/admin/AdminLanguageSwitcher";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const { t } = useAdminLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -18,15 +21,18 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     setLoading(false);
 
-    if (error) {
-      setError("Неверный email или пароль.");
+    if (signInError) {
+      // Supabase phrases this in English and leaks implementation detail, so
+      // the editor sees one plain sentence and the rest goes to the console.
+      console.error("Admin sign-in failed:", signInError);
+      setError(t.loginFailed);
       return;
     }
 
@@ -35,12 +41,16 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-surface-muted px-4">
-      <div className="w-full max-w-sm rounded-2xl border border-border-soft bg-surface p-8 shadow-sm">
+    <div className="flex min-h-screen items-center justify-center bg-surface-muted px-4 py-8">
+      <div className="w-full max-w-sm rounded-2xl border border-border-soft bg-surface p-6 shadow-sm sm:p-8">
+        <div className="flex justify-end">
+          <AdminLanguageSwitcher />
+        </div>
+
         <div className="flex flex-col items-center gap-2 text-center">
           <Image
             src="/logo/logo.png"
-            alt="Rcheuli Medical Center"
+            alt={t.logoAlt}
             width={48}
             height={48}
             className="h-12 w-12 object-contain"
@@ -48,13 +58,16 @@ export default function AdminLoginPage() {
           <h1 className="text-lg font-semibold text-foreground">
             Rcheuli Medical Center
           </h1>
-          <p className="text-sm text-foreground/50">Панель администратора</p>
+          <p className="text-sm text-foreground/50">{t.loginSubtitle}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="email" className="text-sm font-medium text-foreground/70">
-              Email
+            <label
+              htmlFor="email"
+              className="text-sm font-medium text-foreground/70"
+            >
+              {t.loginEmail}
             </label>
             <input
               id="email"
@@ -68,8 +81,11 @@ export default function AdminLoginPage() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="password" className="text-sm font-medium text-foreground/70">
-              Пароль
+            <label
+              htmlFor="password"
+              className="text-sm font-medium text-foreground/70"
+            >
+              {t.loginPassword}
             </label>
             <input
               id="password"
@@ -89,7 +105,7 @@ export default function AdminLoginPage() {
             disabled={loading}
             className="mt-2 rounded-full bg-brand-red px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-red-dark disabled:opacity-60"
           >
-            {loading ? "Вход..." : "Войти"}
+            {loading ? t.loginSubmitting : t.loginSubmit}
           </button>
         </form>
       </div>
