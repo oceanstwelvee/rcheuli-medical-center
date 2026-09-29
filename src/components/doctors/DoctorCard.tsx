@@ -53,7 +53,13 @@ export function DoctorCard({
           </div>
         )}
 
-        <h3 className="text-lg font-bold text-foreground">
+        {/* font-[700] renders exactly like font-bold, but the class name differs
+          on purpose: the BigMed embed is configured with the CSS target
+          selector ".text-lg.font-bold.text-foreground", so this heading used
+          to match it and the widget attached itself here. When the heading is
+          empty the widget even injects its own booking button into it. The
+          booking button belongs in the Hero and nowhere else. */}
+        <h3 className="text-lg font-[700] text-foreground">
           {doctor.full_name}
         </h3>
 
