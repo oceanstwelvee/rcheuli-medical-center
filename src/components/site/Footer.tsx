@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { CLINIC } from "@/lib/constants";
-import { PrimaryCallButton } from "./PhoneLink";
 import { SocialLinks } from "./SocialLinks";
 
 export function Footer() {
@@ -76,7 +75,18 @@ export function Footer() {
             <p className="text-sm leading-relaxed text-foreground/65">
               {t.footerBookText}
             </p>
-            <PrimaryCallButton className="w-fit" />
+            {/* Same BigMed placement and the same zoom-the-wrapper approach as
+                the Hero, but scaled down further: this column is a quarter of
+                the footer (214px at the lg breakpoint, 276px at sm) where the
+                Hero button sits in a full-width row. These values keep the
+                label on one line at every breakpoint. max-w-full is the
+                backstop — the button can never outgrow the column. */}
+            <div className="max-w-full [zoom:0.78] sm:[zoom:0.75] lg:[zoom:0.58]">
+              <div
+                data-bigmed-button="emb_01m352kkdy3ws9g1jraea54xat"
+                data-bigmed-locale={lang}
+              />
+            </div>
           </div>
 
           <div className="flex flex-col gap-3">
@@ -101,6 +111,12 @@ export function Footer() {
                   {phone.display}
                 </a>
               ))}
+              <a
+                href={`mailto:${CLINIC.email}`}
+                className="break-words text-sm font-medium text-foreground/70 transition-colors hover:text-brand-red"
+              >
+                {CLINIC.email}
+              </a>
             </div>
           </div>
         </div>

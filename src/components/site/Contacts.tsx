@@ -34,6 +34,17 @@ export function Contacts() {
             </div>
             <div>
               <p className="text-sm font-semibold uppercase tracking-wide text-foreground/50">
+                {t.contactsEmailLabel}
+              </p>
+              <a
+                href={`mailto:${CLINIC.email}`}
+                className="mt-1 inline-block break-words text-lg font-semibold tracking-tight text-foreground transition-colors hover:text-brand-red"
+              >
+                {CLINIC.email}
+              </a>
+            </div>
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wide text-foreground/50">
                 {t.contactsSocialLabel}
               </p>
               <SocialLinks className="mt-2" />

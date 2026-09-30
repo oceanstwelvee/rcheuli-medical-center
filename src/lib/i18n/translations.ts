@@ -48,6 +48,7 @@ export interface Dict {
   contactsTitle: string;
   contactsAddressLabel: string;
   contactsPhoneLabel: string;
+  contactsEmailLabel: string;
   contactsSocialLabel: string;
   footerRights: string;
   footerAboutTitle: string;
@@ -99,12 +100,13 @@ export const translations: Record<Lang, Dict> = {
     contactsTitle: "კონტაქტი",
     contactsAddressLabel: "მისამართი",
     contactsPhoneLabel: "ტელეფონი",
+    contactsEmailLabel: "ელ. ფოსტა",
     contactsSocialLabel: "სოციალური ქსელები",
     footerRights: "ყველა უფლება დაცულია",
     footerAboutTitle: "კლინიკის შესახებ",
     footerNavTitle: "ნავიგაცია",
     footerBookTitle: "კონსულტაციაზე ჩაწერა",
-    footerBookText: "ონლაინ განაცხადებს არ ვიღებთ — დაგვიკავშირდით მოსახერხებელი გზით",
+    footerBookText: "ჩასაწერად აირჩიეთ თქვენთვის მოსახერხებელი დრო",
     loading: "იტვირთება...",
     adminServiceFeaturedLabel: "მთავარ გვერდზე ჩვენება",
   },
@@ -148,12 +150,13 @@ export const translations: Record<Lang, Dict> = {
     contactsTitle: "Контакты",
     contactsAddressLabel: "Адрес",
     contactsPhoneLabel: "Телефон",
+    contactsEmailLabel: "Email",
     contactsSocialLabel: "Соцсети",
     footerRights: "Все права защищены",
     footerAboutTitle: "О клинике",
     footerNavTitle: "Навигация",
     footerBookTitle: "Записаться на консультацию",
-    footerBookText: "Мы не принимаем заявки онлайн — свяжитесь с нами удобным способом",
+    footerBookText: "Для записи выберите удобное время",
     loading: "Загрузка...",
     adminServiceFeaturedLabel: "Показывать на главной",
   },
@@ -197,12 +200,13 @@ export const translations: Record<Lang, Dict> = {
     contactsTitle: "Contacts",
     contactsAddressLabel: "Address",
     contactsPhoneLabel: "Phone",
+    contactsEmailLabel: "Email",
     contactsSocialLabel: "Social media",
     footerRights: "All rights reserved",
     footerAboutTitle: "About the clinic",
     footerNavTitle: "Navigation",
     footerBookTitle: "Book a consultation",
-    footerBookText: "We don't take requests online — contact us the way that suits you",
+    footerBookText: "Choose a convenient time to book your appointment",
     loading: "Loading...",
     adminServiceFeaturedLabel: "Show on homepage",
   },
